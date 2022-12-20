@@ -1,0 +1,14 @@
+{
+  "name": "Food Explorer-back-end",
+  "version": "1.0.0",
+  "description": "API para desafio final do programa Explorer da Rocketseat",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Gabriel Stertz",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
