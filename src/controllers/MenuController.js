@@ -2,10 +2,11 @@ const knex = require("../database/knex");
 
 class MenuController {
   async create(request, response){
-    const { name, description, price, ingredients, picture } = request.body;
+    const { name, type, description, price, ingredients, picture } = request.body;
 
     const menu_id = await knex("menu").insert({
       name,
+      type,
       description,
       price,
       picture
@@ -46,11 +47,11 @@ class MenuController {
   };
 
   async index(request, response){
-    const { name, ingredients } = request.query;
+    const { name, ingredients, type } = request.query;
 
     let menu;
 
-    if(ingredients && !name){
+    if(ingredients && !name && !type){
       const filterIngredients = ingredients.split(",").map(ingredient => ingredient.trim());
       
       menu = await knex("ingredients")
@@ -65,11 +66,11 @@ class MenuController {
       .innerJoin("menu", "menu.id", "ingredients.menu_id")
       .orderBy("menu.name")
 
-    } else if(name && !ingredients) {
+    } else if(name && !ingredients && !type) {
       menu = await knex("menu")
       .whereLike("name", `%${name}%`)
       .orderBy("name")
-    } else if(ingredients && name) {
+    } else if(ingredients && name && !type) {
       const filterIngredients = ingredients.split(",").map(ingredient => ingredient.trim());
       
       menu = await knex("ingredients")
@@ -84,6 +85,10 @@ class MenuController {
       .whereIn("ingredients.name", filterIngredients)
       .innerJoin("menu", "menu.id", "ingredients.menu_id")
       .orderBy("menu.name")
+    } else if(type && !name && !ingredients){
+      menu = await knex("menu")
+      .where({type})
+      .orderBy("name")
     } else {
       menu = await knex("menu")
       .orderBy("name")
