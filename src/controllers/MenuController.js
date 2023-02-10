@@ -1,15 +1,31 @@
 const knex = require("../database/knex");
 
+const AppError = require("../utils/AppError");
+const DiskStorage = require("../providers/DiskStorage");
+
 class MenuController {
   async create(request, response){
-    const { name, type, description, price, ingredients, picture } = request.body;
+    const { name, type, description, price, ingredients} = request.body;
+      
+    // const pictureFileName = request.file.filename;
+    // const diskStorage = new DiskStorage();
+    // const fileName = await diskStorage.saveFile(pictureFileName);
+    // const picture = fileName;
+
+    const user_id = request.user.id;
+
+    const [user] = await knex("users").where({id: user_id});
+    
+    if(user.is_admin === "false"){
+      throw new AppError("Somente o administrador pode efetuar esta operação", 401);
+    };
 
     const menu_id = await knex("menu").insert({
       name,
       type,
       description,
       price,
-      picture
+      // picture
     });
 
     const ingredientsInsert = ingredients.map(ingredient => {
@@ -21,7 +37,7 @@ class MenuController {
 
     await knex("ingredients").insert(ingredientsInsert);
 
-    response.status(201).json();
+    return response.status(201).json();
   };
 
   async show(request, response){
@@ -40,54 +56,28 @@ class MenuController {
 
   async delete(request, response){
     const { id } = request.params;
-    console.log(id)
+
+    const user_id = request.user.id;
+
+    const [user] = await knex("users").where({id: user_id});
+
+    if(user.is_admin === "false"){
+      throw new AppError("Somente o administrador pode efetuar esta operação", 401)
+    };
+    
     await knex("menu").where({ id }).delete();
 
     return response.json();
   };
 
   async index(request, response){
-    const { name, ingredients, type } = request.query;
+    const { name } = request.query;
 
     let menu;
 
-    if(ingredients && !name && !type){
-      const filterIngredients = ingredients.split(",").map(ingredient => ingredient.trim());
-      
-      menu = await knex("ingredients")
-      .select([
-        "menu.id",
-        "menu.name",
-        "menu.description",
-        "menu.price",
-        "menu.picture"
-      ])
-      .whereIn("ingredients.name", filterIngredients)
-      .innerJoin("menu", "menu.id", "ingredients.menu_id")
-      .orderBy("menu.name")
-
-    } else if(name && !ingredients && !type) {
+    if(name || name !== "") {
       menu = await knex("menu")
       .whereLike("name", `%${name}%`)
-      .orderBy("name")
-    } else if(ingredients && name && !type) {
-      const filterIngredients = ingredients.split(",").map(ingredient => ingredient.trim());
-      
-      menu = await knex("ingredients")
-      .select([
-        "menu.id",
-        "menu.name",
-        "menu.description",
-        "menu.price",
-        "menu.picture"
-      ])
-      .whereLike("menu.name", `%${name}%`)
-      .whereIn("ingredients.name", filterIngredients)
-      .innerJoin("menu", "menu.id", "ingredients.menu_id")
-      .orderBy("menu.name")
-    } else if(type && !name && !ingredients){
-      menu = await knex("menu")
-      .where({type})
       .orderBy("name")
     } else {
       menu = await knex("menu")

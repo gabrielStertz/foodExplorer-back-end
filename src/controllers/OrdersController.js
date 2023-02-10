@@ -6,7 +6,7 @@ const sqliteConnection = require('../database/sqlite');
 class OrdersController {
   async create(request, response){
     const { order_menu_list } = request.body;
-    const {user_id} = request.params
+    const user_id = request.user.id;
 
     const orders_id = await knex("orders").insert({
       user_id
@@ -21,7 +21,7 @@ class OrdersController {
 
     await knex("order_menu_list").insert(orderMenuListInsert);
 
-    response.status(201).json();
+    return response.status(201).json();
   };
 
   async show(request, response){
@@ -49,7 +49,7 @@ class OrdersController {
   };
 
   async index(request, response){
-    const { user_id } = request.query;
+    const user_id = request.user.id;
 
     const orders = await knex("orders")
     .where({user_id})
@@ -79,8 +79,15 @@ class OrdersController {
   async update(request, response){
     const { status } = request.body;
     const { id } = request.params;
+    const user_id = request.user.id;
 
     const database = await sqliteConnection();
+
+    const [user] = await knex("users").where({id: user_id});
+
+    if(user.is_admin === "false"){
+      throw new AppError("Somente o administrador pode efetuar esta operação", 401);
+    };
 
     const order = await knex("orders")
     .where({id})

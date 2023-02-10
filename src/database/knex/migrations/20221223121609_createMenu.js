@@ -4,8 +4,8 @@ exports.up = knex => knex.schema.createTable("menu", table => {
   table.text("name");
   table.text("type");
   table.text("description");
-  table.integer("price");
-  table.text("picture");
+  table.text("price");
+  table.text("picture").default(null);
   table.timestamp("created_at").default(knex.fn.now());
 });
 
