@@ -14,7 +14,7 @@ Back-end for restaurants, with menu, orders and favorites
 >
 > Then type the command `npm run migrate` to create the **database.db**
 >
-> Then type the command `npm start` to create local server, this will also > create the admin account:
+> Then type the command `npm start` to create local server, this will also  create the admin account:
 >
 > **e-mail:** gabriel@gmail.com
 >
