@@ -5,7 +5,7 @@
 Back-end for restaurants, with menu and orders :curry:
 
 
-### Start
+## Start
 
 >
 > To **Run** the project: 
@@ -16,11 +16,12 @@ Back-end for restaurants, with menu and orders :curry:
 >
 > Then type the command `npm start` to create local server, this will also > create the admin account:
 >
-> e-mail: gabriel@gmail.com
-> password: 123
+> **e-mail:** gabriel@gmail.com
+>
+> **password:** 123
 >
 
-### End-points
+## End-points
 
 >
 >to create user: `POST` in `http://localhost:3333/users` in JSON:
@@ -46,16 +47,16 @@ Back-end for restaurants, with menu and orders :curry:
   }
 ```
 
-#### Menu routes
+### Menu routes
 
 >
-> ##### All Users:
+> #### All Users:
 >
 > To get **index** of the menu: `GET` in `http://localhost:3333/menu`
 >
 > To **show** an item: `GET` in `http://localhost:3333/menu/<menu_id>`
 >
-> ##### User Admin:
+> #### User Admin:
 >
 > To **create** an item: `POST` in `http://localhost:3333/menu` in JSON:
 >
@@ -90,10 +91,10 @@ Back-end for restaurants, with menu and orders :curry:
 > send append FormData() "picture"
 >
 
-#### Orders routes
+### Orders routes
 
 >
-> ##### All users:
+> #### All users:
 >
 > To **create** an order: `POST` in `http://localhost:3333/orders` in JSON:
 >
@@ -112,7 +113,7 @@ Back-end for restaurants, with menu and orders :curry:
 > To **delete** an order:
 > `DELETE` in `http://localhost:3333/orders/<orders_id>`
 >
-> ##### User Admin:
+> #### User Admin:
 >
 > To **index** all the orders with status different than "Entregue":
 > `GET` in `http://localhost:3333/order-admin`
@@ -133,7 +134,7 @@ Back-end for restaurants, with menu and orders :curry:
 > `PUT` in `http://localhost:3333/order-payment/<order_id>`
 >
 
-#### Favorites routes
+### Favorites routes
 
 >
 > To **create** a favorite:
