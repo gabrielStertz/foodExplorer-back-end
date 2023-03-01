@@ -1,8 +1,8 @@
-# Stage Desafio Final :rocket:
+# Stage Desafio Final :rocket: :curry:
 
 ## Project with Express, Knex, sqlite, Node.js
 
-Back-end for restaurants, with menu and orders :curry:
+Back-end for restaurants, with menu, orders and favorites
 
 
 ## Start
