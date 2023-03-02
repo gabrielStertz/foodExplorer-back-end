@@ -1,4 +1,4 @@
-# Stage Desafio Final :rocket: :curry:
+# Stage Desafio Final - Program Explorer of the Rocketseat :rocket: :curry:
 
 ## Project with Express, Knex, sqlite, Node.js
 
