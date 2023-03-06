@@ -64,10 +64,6 @@
 
 This project is for the final stage of the program **Explorer** of the [Rocketseat](https://rocketseat.com.br) platform, where we learned how to create Front and Back end, using Javascript, React and others development tools.
 
-### Project Status
-
-#### :sparkles: Food Explorer ready :checkered_flag:
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -286,7 +282,7 @@ $ npm run dev
 
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+Distributed under the MIT License. See [LICENSE.txt](https://github.com/gabrielStertz/foodexplorer-back-end/blob/main/LICENSE.txt) for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
