@@ -1,5 +1,5 @@
 {
-  "name": "Food Explorer-back-end",
+  "name": "food-Explorer-back-end",
   "version": "1.0.0",
   "description": "API para desafio final do programa Explorer da Rocketseat",
   "main": "index.js",
