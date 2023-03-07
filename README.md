@@ -109,14 +109,19 @@ $ npm run dev
 
 # The server will run in localhost:3333 - <http://localhost:3333>
 ```
-
 #### The last command will create an User Admin:
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+## Admin account
+
 >
-> #### **e-mail:** gabriel@gmail.com
+> ### **e-mail:** gabriel@gmail.com
 >
-> #### **password:** 123
+> ### **password:** 123
 >
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -215,10 +220,6 @@ $ npm run dev
 >
 >
 > To **show** an order: `GET` in `http://localhost:3333/orders/<orders_id>`
->
->
-> To **delete** an order:
-> `DELETE` in `http://localhost:3333/orders/<orders_id>`
 >
 > #### User Admin:
 >
