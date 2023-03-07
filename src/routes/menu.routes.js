@@ -13,9 +13,10 @@ const menuController = new MenuController();
 const menuPictureController = new MenuPictureController();
 
 menuRoutes.post("/", ensureAuthenticated, menuController.create);
-menuRoutes.get("/:id", menuController.show);
+menuRoutes.get("/:id", ensureAuthenticated, menuController.show);
 menuRoutes.delete("/:id", ensureAuthenticated, menuController.delete);
-menuRoutes.get("/", menuController.index);
+menuRoutes.get("/", ensureAuthenticated, menuController.index);
+menuRoutes.patch("/:id", ensureAuthenticated, menuController.update);
 menuRoutes.patch("/picture/:id", ensureAuthenticated, upload.single("picture"), menuPictureController.update);
 
 module.exports = menuRoutes;

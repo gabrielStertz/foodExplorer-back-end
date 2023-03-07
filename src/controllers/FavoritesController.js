@@ -2,23 +2,24 @@ const knex = require("../database/knex");
 
 class FavoritesController {
   async create(request, response){
-    const { id } = request.params;
+    const { menu_id } = request.params;
     const user_id = request.user.id;
 
     const favoriteInsert = {
       user_id,
-      menu_id: id
+      menu_id
     };
 
+    
     await knex("favorites").insert(favoriteInsert);
-
+    
     return response.status(201).json();
   };
 
   async delete(request, response){
-    const { id } = request.params;
+    const { menu_id } = request.params;
 
-    await knex("favorites").where({ id }).delete();
+    await knex("favorites").where({ menu_id }).delete();
 
     return response.json();
   };
