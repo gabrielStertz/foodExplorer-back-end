@@ -1,7 +1,9 @@
-const knex = require("../database/knex");
+const MenuRepository = require("../repositories/MenuRepository");
+const UserRepository = require("../repositories/UserRepository");
 
-const AppError = require("../utils/AppError");
-const DiskStorage = require("../providers/DiskStorage")
+const MenuCreateService = require("../services/MenuCreateService");
+const DeleteMenuItemService = require("../services/DeleteMenuItemService");
+const UpdateMenuItemService = require("../services/UpdateMenuItemService");
 
 class MenuController {
   async create(request, response){
@@ -9,27 +11,11 @@ class MenuController {
 
     const user_id = request.user.id;
 
-    const [user] = await knex("users").where({id: user_id});
-    
-    if(user.is_admin === "false"){
-      throw new AppError("Somente o administrador pode efetuar esta operação", 401);
-    };
+    const menuRepository = new MenuRepository();
+    const userRepository = new UserRepository();
+    const menuCreateService = new MenuCreateService(menuRepository, userRepository);
 
-    const menu_id = await knex("menu").insert({
-      name,
-      type,
-      description,
-      price
-    });
-
-    const ingredientsInsert = ingredients.map(ingredient => {
-      return {
-        menu_id,
-        name: ingredient
-      }
-    });
-
-    await knex("ingredients").insert(ingredientsInsert);
+    await menuCreateService.execute({user_id, name, type, description, price, ingredients});
 
     return response.status(201).json();
   };
@@ -37,64 +23,36 @@ class MenuController {
   async show(request, response){
     const { id } = request.params;
 
-    const item_menu = await knex("menu").where({ id }).first();
-    const ingredients = await knex("ingredients").where({ menu_id: id }).orderBy("name");
+    const menuRepository = new MenuRepository();
+
+    const item = await menuRepository.findMenuItemById(id);
 
 
-    return response.json({
-      ...item_menu,
-      ingredients
-    });
+    return response.json(item);
 
   };
 
   async delete(request, response){
     const { id } = request.params;
-
     const user_id = request.user.id;
 
-    const diskStorage = new DiskStorage();
+    const menuRepository = new MenuRepository();
+    const userRepository = new UserRepository();
+    const deleteMenuItemService = new DeleteMenuItemService(menuRepository, userRepository);
 
-    const [user] = await knex("users").where({id: user_id});
-
-    if(user.is_admin === "false"){
-      throw new AppError("Somente o administrador pode efetuar esta operação", 401)
-    };
-
-    const menu = await knex("menu").where({id});
-    await diskStorage.deleteFile(menu[0].picture);
+    await deleteMenuItemService.execute({id, user_id});
     
-    await knex("menu").where({ id }).delete();
-
-    return response.status(201).json();
+    return response.json();
   };
 
   async index(request, response){
     const { name } = request.query;
 
-    let menu;
+    const menuRepository = new MenuRepository();
 
-    if(name) {
-      menu = await knex("menu")
-      .whereLike("name", `%${name}%`)
-      .orderBy("name");
-    } else {
-      menu = await knex("menu")
-      .orderBy("name");
-    };
-    let menuWithIngredients;
-    let menuIngredients = [];
-    for(let i = 0; i < menu.length; i++){
-      menuIngredients[i] = await knex("ingredients").where({menu_id: menu[i].id});
-    };
-    menuWithIngredients = menu.map((item_menu, index) => {
-      return {
-        ...item_menu,
-        ingredients: menuIngredients[index]
-      };
-    });
+    const menu = await menuRepository.indexMenu(name);
 
-    return response.json(menuWithIngredients);
+    return response.json(menu);
   };
 
   async update(request, response){
@@ -102,25 +60,12 @@ class MenuController {
     const { id } = request.params;
     const user_id = request.user.id;
 
-    const [user] = await knex("users").where({id: user_id});
+    const menuRepository = new MenuRepository();
+    const userRepository = new UserRepository();
+    const updateMenuItemService = new UpdateMenuItemService(menuRepository, userRepository);
 
-    if(user.is_admin === "false"){
-      throw new AppError("Operação não permitida para este usuário", 401);
-    };
-
-    await knex("menu").update({ name, type, description, price }).where({id});
-
-    await knex("ingredients").where({menu_id: id}).delete();
-
-    const ingredientsInsert = ingredients.map(ingredient => {
-      return {
-        menu_id: id,
-        name: ingredient
-      }
-    });
-
-    await knex("ingredients").insert(ingredientsInsert);
-
+    await updateMenuItemService.execute({ name, type, description, price, ingredients, id, user_id });
+    
     return response.status(201).json();
   };
 

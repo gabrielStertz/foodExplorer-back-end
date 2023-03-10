@@ -1,40 +1,21 @@
-const knex = require("../database/knex");
+const OrdersRepository = require("../repositories/OrdersRepository");
+const UserRepository = require("../repositories/UserRepository");
 
-const AppError = require("../utils/AppError");
-const sqliteConnection = require('../database/sqlite');
+const IndexOrdersByStatusService = require("../services/IndexOrdersByStatusService");
+const UpdateOrderService = require("../services/UpdateOrderService");
 
 class OrdersAdminController {
   
   async index(request, response){
     const user_id = request.user.id;
 
-    const [user] = await knex("users").where({id: user_id});
+    const ordersRepository = new OrdersRepository();
+    const userRepository = new UserRepository();
+    const indexOrdersByStatusService = new IndexOrdersByStatusService(ordersRepository, userRepository);
 
-    if(user.is_admin === "false"){
-      throw new AppError("Somente o administrador pode efetuar esta operação", 401);
-    };
+    const orders = await indexOrdersByStatusService.execute({user_id});
 
-    const orders = await knex("orders")
-    .whereNot("status", "Entregue")
-    .orderBy("created_at", "desc")
-
-    let ordersWithNames;
-    let order_menu_list = [];
-    for(let i = 0; i < orders.length; i++){
-      order_menu_list[i] = await knex('order_menu_list')
-      .select(["menu.name", "order_menu_list.orders_id"])
-      .where({orders_id: orders[i].id})
-      .innerJoin("menu", "menu.id", "order_menu_list.menu_id");
-    };  
-    ordersWithNames = orders.map((order, index) => {
-      
-      return {
-        ...order,
-        menu_list: order_menu_list[index]
-      }
-    });
-
-    return response.json(ordersWithNames);
+    return response.json(orders);
   };
 
   async update(request, response){
@@ -42,33 +23,13 @@ class OrdersAdminController {
     const { id } = request.params;
     const user_id = request.user.id;
 
-    const database = await sqliteConnection();
+    const ordersRepository = new OrdersRepository();
+    const userRepository = new UserRepository();
+    const updateOrderService = new UpdateOrderService(ordersRepository, userRepository);
 
-    const [user] = await knex("users").where({id: user_id});
+    await updateOrderService.execute({id, status, user_id});
 
-    if(user.is_admin === "false"){
-      throw new AppError("Somente o administrador pode efetuar esta operação", 401);
-    };
-
-    const order = await knex("orders")
-    .where({id})
-    .first();
-
-    if(!order){
-      throw new AppError("Pedido não existe");
-    };
-    
-    
-    await database.run(`
-      UPDATE orders SET
-      status = ?,
-      user_id = ?,
-      created_at = ?,
-      updated_at = DATETIME('now')
-      WHERE id = ?`, [status, order.user_id, order.created_at, id]);
-    
     return response.json();
-
   };
 
 };

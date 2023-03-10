@@ -1,9 +1,11 @@
-const knex = require("../database/knex");
+const FavoritesRepository = require("../repositories/FavoritesRepository");
 
 class FavoritesController {
   async create(request, response){
     const { menu_id } = request.params;
     const user_id = request.user.id;
+
+    const favoritesRepository = new FavoritesRepository();
 
     const favoriteInsert = {
       user_id,
@@ -11,7 +13,7 @@ class FavoritesController {
     };
 
     
-    await knex("favorites").insert(favoriteInsert);
+    await favoritesRepository.create(favoriteInsert);
     
     return response.status(201).json();
   };
@@ -19,7 +21,9 @@ class FavoritesController {
   async delete(request, response){
     const { menu_id } = request.params;
 
-    await knex("favorites").where({ menu_id }).delete();
+    const favoritesRepository = new FavoritesRepository();
+
+    await favoritesRepository.delete(menu_id);
 
     return response.json();
   };
@@ -27,25 +31,11 @@ class FavoritesController {
   async index(request, response){
     const user_id = request.user.id;
     
-    const favorites = await knex("favorites")
-    .where({user_id})
-    .innerJoin("menu", "menu.id", "favorites.menu_id")
-    .orderBy("name");
-
-    let menuWithIngredients;
-    let menuIngredients = [];
-    for(let i = 0; i < favorites.length; i++){
-      menuIngredients[i] = await knex("ingredients").where({menu_id: favorites[i].id});
-    };
-    menuWithIngredients = favorites.map((item_menu, index) => {
-      return {
-        ...item_menu,
-        ingredients: menuIngredients[index]
-      };
-    });
+    const favoritesRepository = new FavoritesRepository();
     
+    const menu = await favoritesRepository.findFavoritesByUserId(user_id);
 
-    return response.json(menuWithIngredients);
+    return response.json(menu);
   };
 
 };

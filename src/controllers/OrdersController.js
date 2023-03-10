@@ -1,73 +1,36 @@
-const knex = require("../database/knex");
-
-const AppError = require("../utils/AppError");
-const sqliteConnection = require('../database/sqlite');
+const OrdersRepository = require("../repositories/OrdersRepository");
 
 class OrdersController {
   async create(request, response){
     const { order_menu_list } = request.body;
     const user_id = request.user.id;
 
-    const orders_id = await knex("orders").insert({
-      user_id
-    });
+    const ordersRepository = new OrdersRepository();
 
-    const orderMenuListInsert = order_menu_list.map(item => {
-      return {
-        orders_id,
-        menu_id: item
-      }
-    });
+    const order_id = await ordersRepository.create(user_id, order_menu_list);
 
-    await knex("order_menu_list").insert(orderMenuListInsert);
-
-    await knex("order_payment").insert({orders_id});
-
-    return response.status(201).json({orders_id});
+    return response.status(201).json({order_id});
   };
 
   async show(request, response){
     const { id } = request.params;
 
-    const order = await knex("orders").where({ id }).first();
-    const order_menu_list = await knex("order_menu_list")
-    .where({ orders_id: id })
-    .innerJoin("menu", "menu.id", "order_menu_list.menu_id");
+    const ordersRepository = new OrdersRepository();
 
-
-    return response.json({
-      ...order,
-      order_menu_list
-    });
+    const order = await ordersRepository.findOrderById(id);
+    
+    return response.json(order);
 
   };
 
   async index(request, response){
     const user_id = request.user.id;
 
-    const orders = await knex("orders")
-    .where({user_id})
-    .orderBy("created_at", "desc")
+    const ordersRepository = new OrdersRepository();
 
-    let ordersWithNames;
-    let order_menu_list = [];
-    for(let i = 0; i < orders.length; i++){
-      order_menu_list[i] = await knex('order_menu_list')
-      .select(["menu.name", "order_menu_list.orders_id"])
-      .where({orders_id: orders[i].id})
-      .innerJoin("menu", "menu.id", "order_menu_list.menu_id");
-    };  
-    ordersWithNames = orders.map((order, index) => {
-      
-      return {
-        ...order,
-        menu_list: order_menu_list[index]
-      }
-    })
+    const orders = await ordersRepository.findOrdersByUserId(user_id);
     
-
-
-    return response.json(ordersWithNames);
+    return response.json(orders);
   };
 
 };
