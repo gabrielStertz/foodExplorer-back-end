@@ -95,7 +95,7 @@ And is good to have an editor to work with de code [VSCode](https://code.visuals
 
 ```bash
 # Clone this repository
-$ git clone <https://github.com/gabrielStertz/foodExplorer-back-end.git>
+$ git clone https://github.com/gabrielStertz/foodExplorer-back-end.git
 
 # Access the folder of the project in terminal/cmd
 $ cd foodExplorer-back-end
