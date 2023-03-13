@@ -3,6 +3,7 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
+[![Netlify Status](https://api.netlify.com/api/v1/badges/d896ff9f-5121-460e-b7e3-ced55066fd60/deploy-status)](https://food-explorer-gabriel-stertz.netlify.app/)
 
 <br />
 <div align="center">
@@ -17,7 +18,7 @@
     <br />
     <br />
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
+    <a href="https://food-explorer-gabriel-stertz.netlify.app/">View Demo</a>
     ·
     <a href="https://github.com/gabrielStertz/foodexplorer-back-end/issues">Report Bug</a>
     ·
@@ -314,11 +315,11 @@ I would like to acknowledge the help of the following:
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-[forks-shield]: https://img.shields.io/github/forks/gabrielStertz/foodexplorer-back-end.svg?style=for-the-badge
+[forks-shield]: https://img.shields.io/github/forks/gabrielStertz/foodexplorer-back-end.svg?style=plastic
 [forks-url]: https://github.com/gabrielStertz/foodexplorer-back-end/network/members
-[stars-shield]: https://img.shields.io/github/stars/gabrielStertz/foodexplorer-back-end.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/gabrielStertz/foodexplorer-back-end.svg?style=plastic
 [stars-url]: https://github.com/gabrielStertz/foodexplorer-back-end/stargazers
-[issues-shield]: https://img.shields.io/github/issues/gabrielStertz/foodexplorer-back-end.svg?style=for-the-badge
+[issues-shield]: https://img.shields.io/github/issues/gabrielStertz/foodexplorer-back-end.svg?style=plastic
 [issues-url]: https://github.com/gabrielStertz/foodexplorer-back-end/issues
-[license-shield]: https://img.shields.io/github/license/gabrielStertz/foodexplorer-back-end.svg?style=for-the-badge
+[license-shield]: https://img.shields.io/github/license/gabrielStertz/foodexplorer-back-end.svg?style=plastic
 [license-url]: https://github.com/gabrielStertz/foodexplorer-back-end/blob/main/LICENSE.txt
