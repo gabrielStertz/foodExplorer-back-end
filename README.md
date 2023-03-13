@@ -18,7 +18,7 @@
     <br />
     <br />
     <br />
-    <a href="https://food-explorer-gabriel-stertz.netlify.app/">View Demo</a>
+    <a href="https://food-explorer-gabriel-stertz.netlify.app/" target="_blank">View Demo</a>
     ·
     <a href="https://github.com/gabrielStertz/foodexplorer-back-end/issues">Report Bug</a>
     ·
