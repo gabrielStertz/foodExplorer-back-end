@@ -45,23 +45,20 @@ class MenuRepository {
       menu = await knex("menu")
       .whereLike("name", `%${name}%`)
       .orderBy("name");
+      if(menu.length === 0){
+        const findIngredients = await knex("ingredients").whereLike("name", `%${name}%`);
+        let menuOfIngredients = [];
+        for(let i = 0; i < findIngredients.length; i++){
+          [menuOfIngredients[i]] = await knex("menu").where({id: findIngredients[i].menu_id});
+        };
+        menu = menuOfIngredients;
+      };
     } else {
       menu = await knex("menu")
       .orderBy("name");
     };
-    let menuWithIngredients;
-    let menuIngredients = [];
-    for(let i = 0; i < menu.length; i++){
-      menuIngredients[i] = await knex("ingredients").where({menu_id: menu[i].id});
-    };
-    menuWithIngredients = menu.map((item_menu, index) => {
-      return {
-        ...item_menu,
-        ingredients: menuIngredients[index]
-      };
-    });
-
-    return menuWithIngredients;
+    
+    return menu;
   };
 
   async updateMenuItem({ name, type, description, price, ingredients, id }){
