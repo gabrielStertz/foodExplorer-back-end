@@ -4,6 +4,7 @@ const sqliteConnection = require('../database/sqlite');
 
 class OrdersRepository {
   async create(user_id, order_menu_list){
+    console.error(user_id);
     const orders_id = await knex("orders").insert({
       user_id
     });
