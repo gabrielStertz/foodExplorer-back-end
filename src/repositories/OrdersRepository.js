@@ -5,19 +5,17 @@ const sqliteConnection = require('../database/sqlite');
 class OrdersRepository {
   async create(user_id, order_menu_list){
     
-    const response = await knex("orders").insert({
+    const [orders_id] = await knex("orders").insert({
       user_id
     });
-    
-    const [orders_id] = response;
-    
+        
     const orderMenuListInsert = order_menu_list.map(item => {
       return {
         orders_id,
         menu_id: item
       }
     });
-
+    
     await knex("order_menu_list").insert(orderMenuListInsert);
 
     await knex("order_payment").insert({orders_id});
