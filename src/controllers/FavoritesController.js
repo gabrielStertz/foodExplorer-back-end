@@ -9,7 +9,7 @@ class FavoritesController {
 
     const favoriteInsert = {
       user_id,
-      menu_id
+      menu_id: Number(menu_id)
     };
 
     

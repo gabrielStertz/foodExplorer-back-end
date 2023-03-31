@@ -4,7 +4,6 @@ class FavoritesRepository {
   async create(favoriteInsert){
     await knex("favorites").insert(favoriteInsert);
   };
-
   async delete(menu_id){
     await knex("favorites").where({ menu_id }).delete();
   };

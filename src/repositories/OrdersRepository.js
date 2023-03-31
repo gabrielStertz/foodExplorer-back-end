@@ -8,7 +8,7 @@ class OrdersRepository {
     const [orders_id] = await knex("orders").insert({
       user_id
     });
-        
+    
     const orderMenuListInsert = order_menu_list.map(item => {
       return {
         orders_id,
