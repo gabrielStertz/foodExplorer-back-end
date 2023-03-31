@@ -1,8 +1,9 @@
 const knex = require("../database/knex");
 
 class FavoritesRepository {
-  async create(favoriteInsert){
-    await knex("favorites").insert(favoriteInsert);
+  async create({user_id, menu_id}){
+    // await knex("favorites").insert(favoriteInsert);
+    await knex.raw("insert into favorites (menu_id, user_id) values (?, ?)", [menu_id, user_id])
   };
   async delete(menu_id){
     await knex("favorites").where({ menu_id }).delete();

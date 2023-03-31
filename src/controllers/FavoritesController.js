@@ -13,7 +13,7 @@ class FavoritesController {
     };
 
     
-    await favoritesRepository.create(favoriteInsert);
+    await favoritesRepository.create({user_id, menu_id: Number(menu_id)});
     
     return response.status(201).json();
   };
