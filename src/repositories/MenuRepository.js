@@ -3,12 +3,14 @@ const knex = require("../database/knex");
 class MenuRepository {
   async createMenu({name, type, description, price, ingredients}){
 
-    const menu_id = await knex("menu").insert({
+    const response = await knex("menu").insert({
       name,
       type,
       description,
       price
     });
+
+    const [menu_id] = response;
 
     const ingredientsInsert = ingredients.map(ingredient => {
       return {
